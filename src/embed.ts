@@ -247,15 +247,16 @@ async function _embed(
   if (opts.defaultStyle !== false) {
     // Add a default stylesheet to the head of the document.
     const ID = 'vega-embed-style';
-    if (!document.getElementById(ID)) {
+    const node = typeof el === 'string' ? document.querySelector(el) : el;
+    const root = (node && node.getRootNode ? node.getRootNode() : document) as ShadowRoot | Document;
+    if (!root.getElementById(ID)) {
       const style = document.createElement('style');
       style.id = ID;
       style.innerText =
         opts.defaultStyle === undefined || opts.defaultStyle === true
           ? (embedStyle ?? '').toString()
           : opts.defaultStyle;
-
-      document.head.appendChild(style);
+      root.appendChild(style);
     }
   }
 
