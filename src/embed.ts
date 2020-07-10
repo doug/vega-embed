@@ -229,18 +229,12 @@ async function loadOpts(opt: EmbedOptions, loader: Loader): Promise<EmbedOptions
   };
 }
 
-function getRoot(el: Element) {
-  const possibleRoot = el.getRootNode ? el.getRootNode() : document;
-  let root: ShadowRoot | Document;
-  let rootContainer: Element | ShadowRoot;
+function getRoot(el: Element): {root: ShadowRoot | Document, rootContainer: Element | ShadowRoot} {
+  const root = el.getRootNode ? el.getRootNode() : document;
   if (possibleRoot instanceof ShadowRoot) {
-    root = possibleRoot;
-    rootContainer = root;
-  } else {
-    root = document;
-    rootContainer = root.head ?? root.body;
+    return {root, rootContainer: root};
   }
-  return { root, rootContainer };
+  return {root: document, rootContainer: document.head ?? document.body};
 }
 
 async function _embed(
